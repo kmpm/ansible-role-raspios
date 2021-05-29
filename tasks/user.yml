@@ -1,0 +1,29 @@
+
+- name: update password
+  shell: "(echo '{{ raspios_user_password }}' ; echo '{{ raspios_user_password }}') | passwd {{ raspios_user }}"
+  when: raspios_user_password is defined
+
+- name: create user bin directory
+  file:
+    path: "/home/{{ raspios_user }}/bin"
+    state: directory
+    mode: "0755"
+    owner: "{{ raspios_user }}"
+    group: "{{ raspios_user }}"
+
+- name: status script
+  template:
+    src: status.sh.j2
+    dest: "/home/{{ raspios_user }}/bin/status.sh"
+    owner: "{{ raspios_user }}"
+    group: "{{ raspios_user }}"
+    mode: '0755'
+
+- name: configure tmux
+  template:
+    src: tmux.conf.j2
+    dest: "/home/{{ raspios_user }}/.tmux.conf"
+    owner: "{{ raspios_user }}"
+    group: "{{ raspios_user }}"
+    mode: '0644'
+    

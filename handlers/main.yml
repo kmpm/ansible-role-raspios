@@ -1,0 +1,6 @@
+---
+# handlers file for raspios
+
+- name: reboot
+  reboot:
+    reboot_timeout: 300

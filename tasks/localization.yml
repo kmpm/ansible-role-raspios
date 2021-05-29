@@ -1,0 +1,26 @@
+#I1 Change Locale
+- name: Change locale
+  shell: "raspi-config nonint do_change_locale {{ raspios_locale }}"
+
+#I2 Change Timezone
+- name: Change timezone
+  shell: "raspi-config nonint do_change_timezone {{ raspios_timezone }}"
+
+#I3 Change Keyboard Layout
+- name: Change keyboard layout
+  shell: "raspi-config nonint do_configure_keyboard {{ raspios_xkblayout }}"
+
+#I4 Change Wi-fi Country
+- name: Get WiFi country
+  shell: "raspi-config nonint get_wifi_country"
+  register: wifi_country
+  changed_when: False
+  ignore_errors: True #to avoid error when WiFi is not present
+  when: raspios_wifi
+
+- name: Print current WiFi country
+  debug: 
+    msg: "Wifi country is: {{ wifi_country.stdout }}" 
+  when: raspios_wifi
+#- name: Set WiFi country
+#shell: "raspi-config nonint do_wifi_country {{ raspios_wifi_country }}"

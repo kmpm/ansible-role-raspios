@@ -1,0 +1,56 @@
+#A1 Expand Filesystem
+- name: Check if FS is expandable
+  shell: "raspi-config nonint get_can_expand"
+  register: fs_filled
+  changed_when: False
+
+- name: Print if FS is expandable or not
+  debug:
+    msg: "Filesystem is expandable! [{{ fs_filled.stdout }}]"
+  when: fs_filled.stdout == '0'
+
+- name: Expand Filesystem
+  shell: "raspi-config nonint do_expand_rootfs"
+
+#A2 Overscan
+- name: Get Overscan status
+  shell: "raspi-config nonint get_overscan"
+  register: pi_overscan
+  changed_when: False
+
+- name: Print Overscan
+  debug: 
+    msg: "Boot overscan is: {{ pi_overscan.stdout }}"
+
+- name: Enable Overscan
+  shell: "raspi-config nonint do_overscan {{ raspios_overscan }}"
+  when: raspios_overscan == True
+
+#A3 Memory Split
+- name: Get current GPU memory split (1/4)
+  shell: "raspi-config nonint get_config_var gpu_mem /boot/config.txt"
+  register: gpu_mem
+  changed_when: False
+
+- name: Get current GPU memory split 256 (2/4)
+  shell: "raspi-config nonint get_config_var gpu_mem_256 /boot/config.txt"
+  register: gpu_mem_256
+  changed_when: False
+
+- name: Get current GPU memory split 512 (3/4)
+  shell: "raspi-config nonint get_config_var gpu_mem_512 /boot/config.txt"
+  register: gpu_mem_512
+  changed_when: False
+
+- name: Get current GPU memory split 1024 (4/4)
+  shell: "raspi-config nonint get_config_var gpu_mem_1024 /boot/config.txt"
+  register: gpu_mem_1k
+  changed_when: False
+
+- name: Print current GPU memory split
+  debug:
+    msg: "Current GPU memory split: {{ gpu_mem.stdout }} - {{ gpu_mem_256.stdout }} - {{ gpu_mem_512.stdout }} - {{ gpu_mem_1k.stdout }}"
+
+- name: Set GPU memory split
+  shell: "raspi-config nonint do_memory_split {{ raspios_memsplit }}"
+  #when: gpu_mem.stdout != raspios_memsplit

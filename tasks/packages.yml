@@ -1,0 +1,30 @@
+- name: Update apt cache if old cache
+  apt:
+    update_cache: yes
+    cache_valid_time: "{{ raspios_cache_valid_time }}"
+
+- name: Upgrade if enabled in raspios_upgrade
+  apt:
+    upgrade: dist
+  when: raspios_upgrade
+
+- name: "install packages"
+  apt:
+    name: "{{ raspios_packages }}"
+
+- name: check if a reboot is required after upgrade
+  register: file
+  stat: path=/var/run/reboot-required get_md5=no
+
+- name: reboot was needed
+  reboot:
+    reboot_timeout: 300
+  when: file.stat.exists == true
+
+- name: remove useless packages from the cache
+  apt:
+    autoclean: yes
+
+- name: remove dependencies that are no longer required
+  apt:
+    autoremove: yes

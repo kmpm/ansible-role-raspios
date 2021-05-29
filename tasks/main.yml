@@ -1,0 +1,23 @@
+---
+# tasks file for raspios
+- name: Get Raspberry Pi type
+  shell: "raspi-config nonint get_pi_type"
+  register: raspios_pi_type
+  changed_when: False
+
+- name: Show pi version
+  debug:
+    msg: "Pi version: {{ raspios_pi_type.stdout }}"
+
+- name: Package tasks
+  include_tasks: packages.yml
+
+- name: Network tasks
+  include_tasks: network.yml
+
+- name: Localization Options
+  include_tasks: localization.yml
+
+- name: Pi user stuff
+  include_tasks: user.yml
+
