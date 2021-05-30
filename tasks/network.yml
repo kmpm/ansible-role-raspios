@@ -2,6 +2,7 @@
   shell: "raspi-config nonint get_hostname"
   register: raspios_current_hostname
   changed_when: False
+  
 
 - name: Print current hostname
   debug:
@@ -9,5 +10,5 @@
 
 - name: Change hostname
   shell: "raspi-config nonint do_hostname {{ raspios_hostname }}"
-  when: raspios_current_hostname.stdout != raspios_hostname
+  when: raspios_hostname is defined and raspios_current_hostname.stdout != raspios_hostname
   notify: reboot
