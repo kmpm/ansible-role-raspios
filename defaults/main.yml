@@ -8,12 +8,12 @@ raspios_cache_valid_time: 3600
 raspios_packages: ['sudo', 'tmux', 'vim', 'git']
 
 raspios_wifi: False
+raspios_netnames: False
 
 raspios_timezone: "Europe/Stockholm"
 raspios_wifi_country: "SE"  # default None
 raspios_locale: 'sv_SE.UTF-8' 
 raspios_xkblayout: "se" #default "gb"
-
 raspios_overscan: False
 raspios_memsplit: '128'
 

@@ -12,3 +12,27 @@
   shell: "raspi-config nonint do_hostname {{ raspios_hostname }}"
   when: raspios_hostname is defined and raspios_current_hostname.stdout != raspios_hostname
   notify: reboot
+
+
+#N2 Wi-fi
+- name: Set WiFi credentials
+  shell: "raspi-config nonint do_wifi_ssid_passphrase {{ raspios_ssid_name }} {{ raspios_ssid_passphrase }}"
+  when: raspios_ssid_name is defined and raspios_ssid_passphrase is defined
+
+#N3 Network interface names
+- name: Get network names status
+  shell: "raspi-config nonint get_net_names"
+  register: pi_netnames
+  changed_when: False
+
+- name: Print current network names status
+  debug:
+    msg: "Current network names status: {{ pi_netnames.stdout }}"
+
+- name: Enable network names
+  shell: "raspi-config nonint do_net_names 0"
+  when: (raspios_netnames == True) and (pi_netnames.stdout != '0')
+
+- name: Disable network names
+  shell: "raspi-config nonint do_net_names 1"
+  when: (raspios_netnames == False) and (pi_netnames.stdout != '1')
