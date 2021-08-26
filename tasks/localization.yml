@@ -22,5 +22,7 @@
   debug: 
     msg: "Wifi country is: {{ wifi_country.stdout }}" 
   when: raspios_wifi
-#- name: Set WiFi country
-#shell: "raspi-config nonint do_wifi_country {{ raspios_wifi_country }}"
+
+- name: Set WiFi country
+  shell: "raspi-config nonint do_wifi_country {{ raspios_wifi_country }}"
+  

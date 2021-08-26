@@ -5,9 +5,16 @@
   register: raspios_pi_type
   changed_when: False
 
+- name: Get base model
+  ansible.builtin.slurp:
+    src: /sys/firmware/devicetree/base/model
+  register: raspios_model
+
 - name: Show pi version
   debug:
-    msg: "Pi version: {{ raspios_pi_type.stdout }}"
+    msg: 
+      - "Pi version:    {{ raspios_pi_type.stdout }}"
+      - "Pi model:      {{ raspios_model.content | b64decode }}"
 
 - name: Package tasks
   include_tasks: packages.yml
