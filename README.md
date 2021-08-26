@@ -4,7 +4,7 @@ Role Name
 A brief description of the role goes here.
 
 - https://github.com/giuaig/ansible-raspi-config/blob/master/raspi-config.yml
-- http://wagnerstechtalk.com/argonone/#Install_Argon_ONE_Scripts_in_Pi_OS_3264-bit
+
 
 Requirements
 ------------
